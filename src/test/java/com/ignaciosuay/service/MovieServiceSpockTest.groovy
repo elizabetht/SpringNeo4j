@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import spock.genesis.Gen
 import spock.genesis.generators.Generator
 import spock.lang.Specification
+import spock.lang.Unroll
 
 
 @SpringBootTest(classes = SpringNeo4JApp.class)
@@ -19,11 +20,16 @@ class MovieServiceSpockTest extends Specification {
     @Autowired
     MovieService movieService;
 
-    def "given a movie save it into the database"() {
+    @Unroll
+    def "given a movie #movie.title save it into the database"() {
         when:
         def movieSaved = movieService.createMovie(movie)
         then:
-        movieRepository.findOne(movieSaved.getId())
+        def foundMovie = movieRepository.findOne(movieSaved.getId())
+        foundMovie.title == movie.title
+        foundMovie.director == movie.director
+        cleanup:
+        movieRepository.delete(movie)
         where:
         movie << getMovie().take(10)
     }
