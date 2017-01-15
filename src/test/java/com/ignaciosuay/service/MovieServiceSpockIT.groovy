@@ -12,7 +12,7 @@ import spock.lang.Unroll
 
 
 @SpringBootTest(classes = SpringNeo4JApp.class)
-class MovieServiceSpockTest extends Specification {
+class MovieServiceSpockIT extends Specification {
 
     @Autowired
     MovieRepository movieRepository;
@@ -22,14 +22,17 @@ class MovieServiceSpockTest extends Specification {
 
     @Unroll
     def "given a movie #movie.title save it into the database"() {
-        when:
+        when: "A movie is created"
         def movieSaved = movieService.createMovie(movie)
-        then:
+
+        then: "Check the movie is in the database with the correct values"
         def foundMovie = movieRepository.findOne(movieSaved.getId())
         foundMovie.title == movie.title
         foundMovie.director == movie.director
+
         cleanup:
         movieRepository.delete(movie)
+
         where:
         movie << getMovie().take(10)
     }

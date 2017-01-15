@@ -49,6 +49,7 @@
             <version>1.1-groovy-2.4-rc-2</version>
             <scope>test</scope>
         </dependency>
+        <!-- spock genesis for generating data -->
         <dependency>
             <groupId>com.nagternal</groupId>
             <artifactId>spock-genesis</artifactId>
